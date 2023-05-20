@@ -9,8 +9,6 @@ import (
 	"time"
 )
 
-
-
 var remainingRetryAttempts = Config.RetryAttempts
 
 func RetryConnection() {

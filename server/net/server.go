@@ -26,7 +26,7 @@ func StartServer() {
 
 		if len(Connections) == Config.ConnectionLimit {
 			conn.Close()
-			Warning("Client is trying to connect, but maximum connetions reached.")
+			Warning("Client is trying to connect, but maximum connections reached.")
 			continue
 		}
 
