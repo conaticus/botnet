@@ -3,35 +3,13 @@
 package net
 
 import (
-	. "botnet/server/util"
-	"encoding/json"
 	"net"
-	"time"
 )
 
 var Connections map[net.Addr]*net.Conn // The value is nil if the client is not currently connected, but has connected before.
 
 func init() {
 	Connections = make(map[net.Addr]*net.Conn)
-}
-
-func KeepAlive(conn net.Conn) {
-	ticker := time.NewTicker(time.Duration(Config.KeepAliveInterval) * time.Second)
-
-	go func() {
-		for {
-			<-ticker.C
-
-			payload := Payload{Type: CodeKeepAlive}
-			encodedPayload, _ := json.Marshal(payload)
-
-			err := Write(conn, encodedPayload)
-			if err != nil {
-				ticker.Stop()
-				break
-			}
-		}
-	}()
 }
 
 func Write(conn net.Conn, payload []byte) error {

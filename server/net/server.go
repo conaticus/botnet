@@ -31,6 +31,5 @@ func StartServer() {
 		}
 
 		Connections[conn.RemoteAddr()] = &conn
-		KeepAlive(conn)
 	}
 }

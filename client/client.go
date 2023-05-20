@@ -39,8 +39,6 @@ func Connect() {
 		var payload map[string]interface{}
 		err = json.Unmarshal([]byte(payloadRaw), &payload)
 		if err != nil { continue }
-
-		if payload["type"] == "keepalive" { continue }
 	}
 
 	RetryConnection()
