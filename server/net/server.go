@@ -31,7 +31,8 @@ func StartServer() {
 			continue
 		}
 
-		addr := conn.LocalAddr().String()
+		addr := conn.RemoteAddr().String()
+		addr = RemovePort(addr)
 
 		_, ok := Connections[addr]
 		if !ok {

@@ -28,7 +28,7 @@ func init() {
 func Write(conn net.Conn, payload string) error {
 	_, err := conn.Write([]byte(payload + "\n")) // The \n is appended as it is used as a delimiter by the client.
 	if err != nil {
-		Connections[conn.LocalAddr().String()] = nil
+		Connections[RemovePort(conn.RemoteAddr().String())] = nil
 	}
 
 	return err
