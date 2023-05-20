@@ -41,7 +41,7 @@ func ParseCommand(input string) {
 						Error("Failed to parse command: missing required parameter '%s'", paramName)
 					}
 
-					return
+					continue
 				}
 
 				if strings.HasPrefix(paramType, "number") && reflect.TypeOf(paramValue).Kind() != reflect.Int {

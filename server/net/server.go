@@ -19,6 +19,7 @@ func StartServer() {
 
 	for {
 		conn, err := listener.Accept()
+
 		if err != nil {
 			Error("Failed to accept connection, %s", err.Error())
 			continue
@@ -30,11 +31,11 @@ func StartServer() {
 			continue
 		}
 
-		addr := conn.LocalAddr()
+		addr := conn.LocalAddr().String()
 
 		_, ok := Connections[addr]
 		if !ok {
-			AppendFile(KnownAddressesPath, addr.String() + "\n")
+			AppendFile(KnownAddressesPath, addr + "\n")
 		}
 
 		Connections[addr] = &conn

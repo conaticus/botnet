@@ -8,33 +8,27 @@ import (
 	"strings"
 )
 
-var Connections map[net.Addr]*net.Conn // The value is nil if the client is not currently connected, but has connected before.
+var Connections map[string]*net.Conn // The value is nil if the client is not currently connected, but has connected before.
 
 func getKnownAddresses() {
 	knownAddressesRaw := ReadFile(KnownAddressesPath, true)
 	knownAddresses := strings.Split(*knownAddressesRaw, "\n")
 	
-	for _, addressStr := range knownAddresses {
-		if addressStr == "" { continue }
-		addr, err := net.ResolveTCPAddr("tcp", addressStr)
-		if err != nil {
-			Error("Failed to resolve known address, %s", err.Error())
-			return
-		}
-
+	for _, addr := range knownAddresses {
+		if addr == "" { continue }
 		Connections[addr] = nil
 	}
 }
 
 func init() {
-	Connections = make(map[net.Addr]*net.Conn)
+	Connections = make(map[string]*net.Conn)
 	getKnownAddresses()
 }
 
-func Write(conn net.Conn, payload []byte) error {
-	_, err := conn.Write(payload)	
+func Write(conn net.Conn, payload string) error {
+	_, err := conn.Write([]byte(payload + "\n")) // The \n is appended as it is used as a delimiter by the client.
 	if err != nil {
-		Connections[conn.LocalAddr()] = nil
+		Connections[conn.LocalAddr().String()] = nil
 	}
 
 	return err
