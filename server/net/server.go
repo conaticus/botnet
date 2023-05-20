@@ -30,6 +30,13 @@ func StartServer() {
 			continue
 		}
 
-		Connections[conn.RemoteAddr()] = &conn
+		addr := conn.LocalAddr()
+
+		_, ok := Connections[addr]
+		if !ok {
+			AppendFile(KnownAddressesPath, addr.String() + "\n")
+		}
+
+		Connections[addr] = &conn
 	}
 }
