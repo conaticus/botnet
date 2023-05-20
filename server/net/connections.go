@@ -11,6 +11,10 @@ import (
 
 var Connections map[net.Addr]*net.Conn // The value is nil if the client is not currently connected, but has connected before.
 
+func init() {
+	Connections = make(map[net.Addr]*net.Conn)
+}
+
 func KeepAlive(conn net.Conn) {
 	ticker := time.NewTicker(time.Duration(Config.KeepAliveInterval) * time.Second)
 

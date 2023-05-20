@@ -1,9 +1,9 @@
 package net
 
 const (
-	CodeKeepAlive = iota
+	CodeKeepAlive = "keepalive"
 )
 
 type Payload struct {
-	Type int
+	Type string `json:"type"`
 }
