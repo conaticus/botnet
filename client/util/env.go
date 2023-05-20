@@ -11,6 +11,7 @@ import (
 type EnvConfig struct {
 	ServerUrl string
 	RetryInterval int
+	RetryAttempts int
 }
 
 var Config EnvConfig
@@ -24,6 +25,7 @@ func init() {
 	Config = EnvConfig{
 		ServerUrl: EnvGetString("SERVER_URL", true),
 		RetryInterval: EnvGetNumber("RETRY_INTERVAL", true),
+		RetryAttempts: EnvGetNumber("RETRY_ATTEMPTS", true),
 	}
 }
 

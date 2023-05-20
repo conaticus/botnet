@@ -5,14 +5,29 @@ import (
 	"bufio"
 	"encoding/json"
 	"net"
+	"os"
 	"time"
 )
+
+
+
+var remainingRetryAttempts = Config.RetryAttempts
+
+func RetryConnection() {
+	if remainingRetryAttempts == 0 {
+		os.Exit(-1)
+	}
+
+	remainingRetryAttempts -= 1
+	Connect()
+}
 
 func Connect() {
 	conn, err := net.Dial("tcp", Config.ServerUrl)
 	if err != nil {
 		time.Sleep(time.Duration(Config.RetryInterval) * time.Minute) // Infinitely keep retrying
-		Connect()
+		RetryConnection()
+		return
 	}
 
 	reader := bufio.NewReader(conn)
@@ -28,7 +43,7 @@ func Connect() {
 		if payload["type"] == "keepalive" { continue }
 	}
 
-	Connect() // If disconnected, retry a connection infinitely
+	RetryConnection()
 }
 
 func main() {
