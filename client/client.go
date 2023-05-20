@@ -25,7 +25,7 @@ func RetryConnection() {
 func Connect() {
 	conn, err := net.Dial("tcp", Config.ServerUrl)
 	if err != nil {
-		time.Sleep(time.Duration(Config.RetryInterval) * time.Minute) // Infinitely keep retrying
+		time.Sleep(time.Duration(Config.RetryInterval) * time.Minute)
 		RetryConnection()
 		return
 	}
