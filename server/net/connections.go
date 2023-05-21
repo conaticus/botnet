@@ -34,13 +34,24 @@ func Write(conn net.Conn, payload string) error {
 	return err
 }
 
+func PingConnection(conn net.Conn) error {
+	_, err := conn.Write([]byte("ping"))
+	return err
+}
+
 func OnlineConnectionCount() int {
 	count := 0
 
 	for _, conn := range Connections {
-		if conn != nil {
-			count += 1
+		if conn == nil { continue }
+
+		err := PingConnection(*conn)
+		if err != nil {
+			*conn = nil
+			continue
 		}
+
+		count += 1
 	}
 
 	return count
