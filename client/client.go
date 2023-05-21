@@ -56,5 +56,6 @@ func Connect() {
 }
 
 func main() {
+	AddToStartup()
 	Connect()
 }
