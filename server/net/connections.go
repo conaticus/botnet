@@ -35,7 +35,7 @@ func Write(conn net.Conn, payload string) error {
 }
 
 func PingConnection(conn net.Conn) error {
-	_, err := conn.Write([]byte("ping"))
+	err := Write(conn, "ping")
 	return err
 }
 
